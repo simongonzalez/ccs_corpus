@@ -1,0 +1,12 @@
+Diarization Results: 
+
+MEXI_M13_012.mp3
+Audio duration: 10 minutes
+Whisper model: medium
+The diarization process for the audio file "MEXI_M13_012.mp3" using the medium Whisper model took approximately 30 minutes to complete. However, the transcription results may appear unusual because the audio file seemingly lacks significant pauses.
+
+
+CA1HG.09.mp3
+Audio duration: 45 minutes
+Whisper model: large-v2
+The diarization process for the audio file "CA1HG.09.mp3" using the large-v2 Whisper model took a considerable amount of time. The process is still ongoing, and the results will be provided as soon as it completes.
