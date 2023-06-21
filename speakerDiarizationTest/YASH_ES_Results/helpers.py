@@ -219,41 +219,53 @@ def get_realigned_ws_mapping_with_punctuation(
 
         k += 1
 
-    k, realigned_list = 0, []
+    k, realigned_list,word_list = 0, [], []
     while k < len(word_speaker_mapping):
         line_dict = word_speaker_mapping[k].copy()
         line_dict["speaker"] = speaker_list[k]
         realigned_list.append(line_dict)
+        word_list.append(word_speaker_mapping[k])
         k += 1
 
-    return realigned_list
+    return realigned_list, word_list
 
 
 def get_sentences_speaker_mapping(word_speaker_mapping, spk_ts):
     s, e, spk = spk_ts[0]
     prev_spk = spk
-
+    word_ts = []
     snts = []
     snt = {"speaker": f"Speaker {spk}", "start_time": s, "end_time": e, "text": ""}
 
     for wrd_dict in word_speaker_mapping:
         wrd, spk = wrd_dict["word"], wrd_dict["speaker"]
         s, e = wrd_dict["start_time"], wrd_dict["end_time"]
-        if spk != prev_spk:
-            snts.append(snt)
-            snt = {
+        word_ts.append(format_timestamp(s, always_include_hours=True, decimal_marker=','))
+        word_ts.append(wrd)
+        word_ts.append(format_timestamp(e, always_include_hours=True, decimal_marker=','))
+        # if spk != prev_spk:
+            # snts.append(snt)
+            # snt = {
+                # "speaker": f"Speaker {spk}",
+                # "start_time": s,
+                # "end_time": e,
+                # "text": "",
+            # }
+        # else:
+            # snt["end_time"] = e
+        snts.append(snt)
+        snt = {
                 "speaker": f"Speaker {spk}",
                 "start_time": s,
                 "end_time": e,
                 "text": "",
             }
-        else:
-            snt["end_time"] = e
         snt["text"] += wrd + " "
         prev_spk = spk
 
     snts.append(snt)
-    return snts
+    #print(word_ts)
+    return snts, word_ts
 
 
 def get_speaker_aware_transcript(sentences_speaker_mapping, f):

@@ -8,6 +8,7 @@ from deepmultilingualpunctuation import PunctuationModel
 import re
 import subprocess
 import logging
+import csv
 
 mtypes = {'cpu': 'int8', 'cuda': 'float16'}
 
@@ -94,6 +95,7 @@ if info.language in wav2vec2_langs:
         whisper_results, alignment_model, metadata, vocal_target, args.device
     )
     word_timestamps = result_aligned["word_segments"]
+    
     # clear gpu vram
     del alignment_model
     torch.cuda.empty_cache()
@@ -102,6 +104,7 @@ else:
     for segment in whisper_results:
         for word in segment["words"]:
             word_timestamps.append({"text": word[2], "start": word[0], "end": word[1]})
+
 
 # Reading timestamps <> Speaker Labels mapping
 nemo_process.communicate()
@@ -124,7 +127,7 @@ if info.language in punct_model_langs:
     punct_model = PunctuationModel(model="kredor/punctuate-all")
 
     words_list = list(map(lambda x: x["word"], wsm))
-
+    
     labled_words = punct_model.predict(words_list)
 
     ending_puncts = ".?!"
@@ -145,14 +148,17 @@ if info.language in punct_model_langs:
                 word = word.rstrip(".")
             word_dict["word"] = word
 
-    wsm = get_realigned_ws_mapping_with_punctuation(wsm)
+    wsm, word_list = get_realigned_ws_mapping_with_punctuation(wsm)
+    
 else:
     logging.warning(
         f'Punctuation restoration is not available for {info.language} language.'
     )
-
-ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
-
+word_timestamps = []
+ssm, word_timestamps = get_sentences_speaker_mapping(wsm, speaker_ts)
+# with open('word_timestamps.srt','w',encoding="utf-8-sig") as file:
+    	# writer = csv.writer(file)
+    	# writer.writerows(word_timestamps)
 with open(f"{args.audio[:-4]}.txt", "w", encoding="utf-8-sig") as f:
     get_speaker_aware_transcript(ssm, f)
 
