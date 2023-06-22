@@ -9,7 +9,9 @@ import re
 import subprocess
 import logging
 import csv
+import time 
 
+start_time = time.time()
 mtypes = {'cpu': 'int8', 'cuda': 'float16'}
 
 # Initialize parser
@@ -41,7 +43,7 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-
+# print(args)
 if args.stemming:
     # Isolate vocals from the rest of the audio
 
@@ -162,7 +164,13 @@ ssm, word_timestamps = get_sentences_speaker_mapping(wsm, speaker_ts)
 with open(f"{args.audio[:-4]}.txt", "w", encoding="utf-8-sig") as f:
     get_speaker_aware_transcript(ssm, f)
 
-with open(f"{args.audio[:-4]}.srt", "w", encoding="utf-8-sig") as srt:
+with open(f"{args.audio[:-4]}_{args.model_name}.srt", "w", encoding="utf-8-sig") as srt:
     write_srt(ssm, srt)
 
 cleanup(temp_path)
+
+end_time = time.time()
+tot_time = start_time - end_time
+hours = int(tot_time // 3600)
+minutes = int((tot_time % 3600) // 60)
+print("Runtime: {} hours {} minutes".format(hours, minutes))
