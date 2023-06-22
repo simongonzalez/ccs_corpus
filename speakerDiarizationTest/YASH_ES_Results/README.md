@@ -8,3 +8,7 @@ CA1HG.09.mp3
 Audio duration: 45 minutes
 Whisper model: large-v2
 The diarization process for the audio file "CA1HG.09.mp3" using the large-v2 Whisper model took a considerable amount of time (60 minutes). The transcription results are not proper, and further investigation is required to identify the cause. The results are available for review.
+
+
+Updated results - 
+The _updated files show updated results. These present word-level timestamps. The updated code has also been pushed, and the helper.py and diarize_parallel.py were updated. Even if GPU is not present use diarize_parallel.py to execute the code.
