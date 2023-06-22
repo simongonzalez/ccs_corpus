@@ -12,3 +12,7 @@ The diarization process for the audio file "CA1HG.09.mp3" using the large-v2 Whi
 
 Updated results - 
 The _updated files show updated results. These present word-level timestamps. The updated code has also been pushed, and the helper.py and diarize_parallel.py were updated. Even if GPU is not present use diarize_parallel.py to execute the code.
+
+Run the code using the following command - 
+Whisper model parameter can take these values - ('tiny', 'base', 'small', 'medium', 'large-v1', 'large-v2', 'large')
+python diarize_parallel.py -a audio_file.mp3 --whisper-model large-v2
