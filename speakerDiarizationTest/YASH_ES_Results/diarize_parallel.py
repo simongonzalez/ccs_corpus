@@ -170,7 +170,7 @@ with open(f"{args.audio[:-4]}_{args.model_name}.srt", "w", encoding="utf-8-sig")
 cleanup(temp_path)
 
 end_time = time.time()
-tot_time = start_time - end_time
+tot_time = end_time -start_time
 hours = int(tot_time // 3600)
 minutes = int((tot_time % 3600) // 60)
 print("Runtime: {} hours {} minutes".format(hours, minutes))
