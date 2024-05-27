@@ -1,0 +1,22 @@
+URL: https://montreal-forced-aligner.readthedocs.io/en/latest/
+
+1. Download dictionary
+mfa model download dictionary spanish_mfa
+
+2. Download acoustic model
+mfa model download acoustic spanish_mfa
+
+In Terminal:
+
+3. Activate aligner
+conda activate aligner
+
+4.
+mfa validate /Users/calejohnstone/Documents/wk/ESP/2024/CCS/CCSFiles/forcedalignment/ccs_test2 spanish_mfa spanish_mfa
+5.
+mfa align /Users/calejohnstone/Documents/wk/ESP/2024/CCS/CCSFiles/forcedalignment/ccs_test3 spanish_mfa spanish_mfa /Users/calejohnstone/Documents/wk/ESP/2024/CCS/CCSFiles/forcedalignment/ccs_test3_output
+
+#Not to run
+mfa model download g2p english_us_arpa
+
+
