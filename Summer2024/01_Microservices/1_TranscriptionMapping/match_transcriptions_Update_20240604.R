@@ -254,12 +254,14 @@ for(filei in 1:nrow(dfall)){
     }
   }
   
+  #Get duration of file
+  tgdur = dfall$dur[filei]
+    
   tmpspeakerdf <- df_speaker %>%
       arrange(start) %>%
-      filter(end > start)
-  
-  #CA1HA_87
-  tgdur = dfall$dur[filei]
+      filter(end > start) %>%
+      filter(start <= tgdur) %>%
+      filter(end <= tgdur)
   
   #Creates TextGrid
   tg <- rPraat::tg.createNewTextGrid(0, tgdur)
