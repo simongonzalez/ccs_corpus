@@ -254,7 +254,9 @@ for(filei in 1:nrow(dfall)){
     }
   }
   
-  tmpspeakerdf <- df_speaker
+  tmpspeakerdf <- df_speaker %>%
+      arrange(start) %>%
+      filter(end > start)
   
   #CA1HA_87
   tgdur = dfall$dur[filei]
