@@ -1,0 +1,38 @@
+#................................................................
+#Reads the CSV file as a Table in Praat
+Read Table from comma-separated file... 'filename$'.csv
+
+#................................................................
+#How to select Objects
+selectObject: "Table 'filename$'"
+
+#................................................................
+#Get total number of columns for the Table
+tableCols = Get number of rows
+
+#................................................................
+#Gets the name of the speaker
+tmpFile$ = Get value... i speaker
+
+#................................................................
+#Gets the time at which point all the acoustic information will be extracted
+tmpTime = Get value... i time
+
+#................................................................
+#Get values for each specific acoustic parameter
+## Intensity
+tmpIntensityValue = Get value at time... tmpTime Cubic
+## Pitch
+tmpPitchValue = Get value at time... tmpTime Hertz Linear
+## Formant
+f1Value = Get value at time... 1 tmpTime hertz Linear
+## MFCC
+frame_number = Get frame number from time... tmpTime
+
+#................................................................
+# Set numeric value to the CSV file
+Set numeric value... i pitchValue tmpPitchValue
+
+#................................................................
+# Save Table as CSV file
+Save as comma-separated file... 'filename$'.csv
