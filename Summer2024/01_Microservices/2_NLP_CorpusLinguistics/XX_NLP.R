@@ -14,9 +14,6 @@ library(udpipe)
 #UDPIPE model
 mdl <- udpipe::udpipe_load_model('/Users/calejohnstone/Documents/wk/work/udpipeModels/spanish-gsd-ud-2.5-191206.udpipe')
 
-#duration files
-fls_df <- read.csv('/Users/calejohnstone/Documents/wk/ESP/2024/CCS/CCSFiles/XX_duration_files_20240324.csv')
-
 #...............................................................................
 #Read in manual transcription
 df_doc <- data.frame(raw = str_squish(unlist(strsplit(read_doc('/Users/calejohnstone/Documents/wk/ESP/2024/CCS/CCSFiles/data/AllCorrectedOriginals/CA1HA_87.doc'), '\n')))) %>%
