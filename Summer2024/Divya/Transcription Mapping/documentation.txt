@@ -1,0 +1,12 @@
+This microservice takes in
+
+inputs:
+a .doc file >> manual transcription
+a .mp3.srt >> whisper generated transcription file
+
+make sure the file names are in the following format:
+<file_name>.doc >> manual transcription file
+<file_name>.mp3.srt >> whisper generated transcription file
+
+make sure to that both the manual and whisper generated have the same file name. only then the script
+will generate the .TextGrid file

@@ -1,0 +1,22 @@
+Purpose
+This Python script processes multiple pairs of audio and data files by:
+
+Converting .mp3 files to .wav format.
+Extracting various acoustic features from the .wav files at specified time points.
+Updating a corresponding CSV file with the extracted features.
+Saving the updated CSV files to an output directory.
+The script is designed to handle batch processing of multiple audio files and their associated data files.
+
+Inputs
+Directory Structure:
+
+input_output/input: Contains the .mp3 audio files and their corresponding _data_info.csv files.
+input_output/output: The directory where the processed CSV files will be saved.
+File Naming Conventions:
+
+Audio files: <file_name>.mp3
+Data files: <file_name>_data_info.csv
+For example, an audio file named example.mp3 should have a corresponding data file named example_data_info.csv in the same directory.
+
+Outputs
+Updated CSV Files: Saved in the output directory with the naming convention <file_name>_data_info_updated.csv.

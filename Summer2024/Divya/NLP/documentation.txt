@@ -1,0 +1,8 @@
+This microservice goes through the manual transcription files in the specified input folder and provides
+nlp statistics for it.
+
+inputs:
+input_folder : folder where all the manual transcripts are present
+
+output:
+creates statistics for the files under output directory parallel to this python file
