@@ -91,6 +91,24 @@ This script processes TextGrid files to extract and analyze phonetic segment dat
 - **Processing Intervals from TextGrid:** Intervals from input TextGrid files are extracted and stored in a Data Frame `df_in`. A new interval tier is created and added to the output TextGrid file.
 - **Extracting and Mapping Intervals:** Labels, onset times, and offset times are extracted from a specific tier. Indices of labels not in the excluded list are found. Labels are cleaned using a custom `str_squish` function. Previous, following, onset, offset, and duration data are collected for these labels.
 - **Finding Words and Text Data:** `find_words` function is used to find word and text data. The `find_words` function extracts information about a word from a TextGrid file based on a specified phonetic segment. It takes parameters for the TextGrid object, segment index, segment tier label, and word tier label. The function retrieves the segment and word tiers, calculates the segment's start and end times, identifies the last word entry that starts before or at the segment's start time, and extracts the word's label, onset time, offset time, midpoint, and duration. It returns these details in a list, allowing for the association of phonetic segments with their corresponding words.
+- **Data frame for segments:** Data frame with segment related info is added. Unique segments are mapped to special phonological features.
+- **Data frame for phonological features:** Data Frame with phonological feature mappings is created and merged with the main Data Frame. Midpoints for segments are calculated and stored in a csv. Additional segment mappings and grouping operations are performed
+
+**Inputs/Outputs:**
+
+- **Inputs:**  
+ Textgrid files before and after being passed through a Montreal Forced Aligner
+- **Outputs:**  
+  CSV files (df_phon.csv and dat_append.csv) containing segment-related information and phonological features 
+
+**Tools/Technology Used:**
+
+- **Specific Python Libraries:** praatio, pandas, seaborn
+
+**Limitations:**
+
+- The code relies on the accuracy and consistency of the input TextGrid files and associated data. Any inconsistencies or errors in these input files can lead to incorrect segment processing and feature extraction. 
+
 
 ## Acoustic Extraction
 
