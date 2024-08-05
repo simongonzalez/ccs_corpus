@@ -1,169 +1,122 @@
-# Project Title
+# Venezuelan Spanish Linguistic Characterization Project
 
 ## Introduction
 
-Our work aims to extend technological innovations in linguistic characterization to enhance the understanding of Venezuelan Spanish. In the current phase of the project, we focus on converting the microservices from R to Python. We aim to migrate microservices responsible for transcription mapping, natural language processing, forced alignment, acoustic extraction, and data merging to Python. With this conversion, we hope to streamline the workflow, which would allow us to leverage more advanced libraries and tools available in the Python ecosystem. By doing so, we hope to improve the efficiency and accuracy of our speech-to-text processing, forced alignment, and acoustic feature extraction. The methodology for each microservice is described below in detail.
+Our work aims to extend technological innovations in linguistic characterization to enhance the understanding of Venezuelan Spanish. In the current phase of the project, we focus on converting the microservices from R to Python. We aim to migrate microservices responsible for transcription mapping, natural language processing, forced alignment, acoustic extraction, and data merging to Python. With this conversion, we hope to streamline the workflow, leveraging more advanced libraries and tools available in the Python ecosystem. This will improve the efficiency and accuracy of our speech-to-text processing, forced alignment, and acoustic feature extraction. The methodology for each microservice is described below in detail.
 
-There are 6 micro-services involved in this project and each micro-service is detailed below.
+---
 ![Alt text](https://github.com/simongonzalez/ccs_corpus/blob/main/Summer2024/01_Microservices/documentation/flow_chart.png)
 
-## Speech to Text Analysis
+## Microservices
 
-**Description:**
+### Speech to Text Analysis
 
-This script utilizes OpenAI's Whisper model to convert audio files in MP3 format into subtitle files in the SRT format. The script processes each audio file, transcribes the spoken content, and generates a time-stamped SRT file suitable for use in video subtitles or for creating transcripts, preparing data for further analysis.
+**Description**:  
+This script utilizes OpenAI's Whisper model to convert audio files in MP3 format into subtitle files in the SRT format. It processes each audio file, transcribes the spoken content, and generates a time-stamped SRT file suitable for use in video subtitles or for creating transcripts.
 
-**Inputs/Outputs:**
+**Inputs/Outputs**:  
+- **Inputs**: Audio files in MP3 format.  
+- **Outputs**: Subtitle files in SRT format, which include time-stamped transcriptions of the audio content.
 
-- **Inputs:**  
-  Audio files in MP3 format.
-- **Outputs:**  
-  Subtitle files in SRT format, which include time-stamped transcriptions of the audio content.
+**Tools/Technology Used**:  
+- **Transcription Model**: OpenAI Whisper  
+- **Specific Python Libraries**: `pydub`, `librosa`
 
-**Tools/Technology Used:**
-
-- **Transcription Model:** OpenAI Whisper
-- **Specific Python Libraries:** pydub, librosa
-
-**Limitations:**
-
+**Limitations**:  
 - The link to the GitHub repository in the Colab document needs to be changed.
 
-## Transcription Mapping
+---
 
-**Description:**
+### Transcription Mapping
 
-This script processes manual transcripts and corresponding Open-AI whisper generated subtitle files to generate n-gram data and match segments of spoken language with their textual representation. It performs the following tasks:
-- **Conversion:** Converts .doc files to .docx if necessary.
-- **Reading and Cleaning:** Reads the content of .docx files, identifies speakers, and cleans the text.
-- **Text Splitting:** Splits the text into segments based on specific delimiters and creates n-grams (bi-grams to 10-grams).
-- **SRT Processing:** Reads SRT files, cleans, and processes the text into n-grams (bi-grams to 10-grams).
-- **Matching N-grams:** Matches n-grams from the manual transcripts with those from the SRT files.
-- **Extracting Time Stamps:** For matched n-grams, the corresponding time stamps from the .srt file are retained. The .srt files have time stamps indicating the start and end times for each subtitle line. Only those segments from the .srt files that contain matching n-grams are kept. The resulting data includes the start and end times (in milliseconds) for each matched n-gram.
-- **Creating TextGrid Files:** Using the matched n-grams and their corresponding time stamps, the script creates intervals for each match. Each interval represents a segment of speech that has been matched between the manual transcription and the .srt file. These intervals are stored in a TextGrid format using the tgt library. Each interval includes a start time, an end time, and the associated matched text.
+**Description**:  
+This script processes manual transcripts and corresponding Whisper-generated subtitle files to generate n-gram data and match segments of spoken language with their textual representation.
 
-**Inputs/Outputs:**
+**Inputs/Outputs**:  
+- **Inputs**: Manual transcripts in .doc format, corresponding .srt files generated by Whisper.  
+- **Outputs**: Matched n-gram data saved as CSV files for different n-gram lengths (2 to 10). TextGrid file containing intervals for each identified spoken segment.
 
-- **Inputs:**  
-  Manual transcripts in .doc format  
-  Corresponding .srt files generated by Whisper
-- **Outputs:**  
-  Matched n-gram data saved as CSV files for different n-gram lengths (2 to 10).  
-  TextGrid file containing intervals for each identified spoken segment.
+**Tools/Technology Used**:  
+- **Specific Python Libraries**: `parselmouth`, `tgt`, `pypandoc`, `pysrt`, `libreoffice`, `nltk`
 
-**Tools/Technology Used:**
+**Limitations**:  
+- Assumes manual transcripts are in .doc format; other formats will not be processed.
+- The script's handling of different file encodings may not always be correct. 
+- The script was tested only in a Mac environment.
 
-- **Specific Python Libraries:** parselmouth, tgt, pypandoc, pysrt, libreoffice, nltk
+---
 
-**Limitations:**
+### Natural Language Processing (NLP)
 
-- The script assumes that manual transcripts are in .doc format. Other formats will not be processed.
-- The script attempts to detect and handle different file encodings but may not always correctly interpret non-standard encodings. This script was run and tested only on a Mac environment.
+**Description**:  
+The script processes Spanish manual transcriptions from .doc files, cleaning the text, identifying question and exclamation structures, and annotating the text using the Stanza NLP library. It generates linguistic statistics and speaker-specific metrics.
 
-## NLP
+**Inputs/Outputs**:  
+- **Inputs**: Manual transcripts in .doc format.  
+- **Outputs**: CSV file containing cleaned, segmented text and various analysis data.
 
-**Description:**
+**Tools/Technology Used**:  
+- **Specific Python Libraries**: `stanza`, `pypandoc`
 
-The script processes Spanish manual transcriptions from .doc files. It cleans the text, identifies and categorizes question and exclamation structures, and annotates the text using the Stanza NLP library. The script also generates various linguistic statistics and speaker-specific metrics such as (character/word count, total group turns, total turns, total questions, etc.). The output is saved as CSV files containing detailed annotation and analysis data.
+**Limitations**:  
+- Only supports .doc/.docx files; additional conversion is required for other formats.
+- Performance may degrade with large datasets, especially due to NLP processing bottlenecks.
 
-**Inputs/Outputs:**
+---
 
-- **Inputs:**  
-  Manual transcripts in .doc format
-- **Outputs:**  
-  CSV file containing cleaned, segmented text and various analysis data
+### Montreal Forced Alignment (MFA)
 
-**Tools/Technology Used:**
+**Description**:  
+This script processes TextGrid files to extract and analyze phonetic segment data, including creating and merging DataFrames, processing intervals, and extracting segment-related information.
 
-- **Specific Python Libraries:** stanza, pypandoc
+**Inputs/Outputs**:  
+- **Inputs**: TextGrid files before and after processing with Montreal Forced Aligner.  
+- **Outputs**: CSV files (df_phon.csv and dat_append.csv) containing segment-related information and phonological features.
 
-**Limitations:**
+**Tools/Technology Used**:  
+- **Specific Python Libraries**: `praatio`, `pandas`, `seaborn`
 
-- The script requires .doc/.docx files as input. It does not support other formats like plain text, PDF, or other word processor formats without additional conversion steps.
-- The script's performance may degrade with very large datasets, especially if the NLP processing with Stanza becomes a bottleneck. It takes about 3-4 minutes to process a manual transcript file.
+**Limitations**:  
+- Relies on the accuracy and consistency of the input TextGrid files.
 
-## MFA
+---
 
-**Description:**
+### Acoustic Extraction
 
-This script processes TextGrid files to extract and analyze phonetic segment data. It performs the following tasks:
-- **Create and merge Data Frames for Input and Output Files:** Data Frames `df_fls_in` and `df_fls_out` are created for input and output files, respectively. These Data Frames are merged into `df_fls` based on the filenames.
-- **Processing Intervals from TextGrid:** Intervals from input TextGrid files are extracted and stored in a Data Frame `df_in`. A new interval tier is created and added to the output TextGrid file.
-- **Extracting and Mapping Intervals:** Labels, onset times, and offset times are extracted from a specific tier. Indices of labels not in the excluded list are found. Labels are cleaned using a custom `str_squish` function. Previous, following, onset, offset, and duration data are collected for these labels.
-- **Finding Words and Text Data:** `find_words` function is used to find word and text data. The `find_words` function extracts information about a word from a TextGrid file based on a specified phonetic segment. It takes parameters for the TextGrid object, segment index, segment tier label, and word tier label. The function retrieves the segment and word tiers, calculates the segment's start and end times, identifies the last word entry that starts before or at the segment's start time, and extracts the word's label, onset time, offset time, midpoint, and duration. It returns these details in a list, allowing for the association of phonetic segments with their corresponding words.
-- **Data frame for segments:** Data frame with segment related info is added. Unique segments are mapped to special phonological features.
-- **Data frame for phonological features:** Data Frame with phonological feature mappings is created and merged with the main Data Frame. Midpoints for segments are calculated and stored in a csv. Additional segment mappings and grouping operations are performed
+**Description**:  
+The script processes audio interview files and corresponding CSV data files, extracting audio features such as MFCCs, pitch, intensity, and formants.
 
-**Inputs/Outputs:**
+**Inputs/Outputs**:  
+- **Inputs**: MP3 interview audio files, corresponding CSV files with speaker and timestamp information.  
+- **Outputs**: Updated CSV files with extracted audio features.
 
-- **Inputs:**  
- Textgrid files before and after being passed through a Montreal Forced Aligner
-- **Outputs:**  
-  CSV files (df_phon.csv and dat_append.csv) containing segment-related information and phonological features 
+**Tools/Technology Used**:  
+- **Specific Python Libraries**: `parselmouth`, `librosa`
 
-**Tools/Technology Used:**
+**Limitations**:  
+- Processing can be slow for large audio files or CSVs with many rows.
 
-- **Specific Python Libraries:** praatio, pandas, seaborn
+---
 
-**Limitations:**
+### Data Merging
 
-- The code relies on the accuracy and consistency of the input TextGrid files and associated data. Any inconsistencies or errors in these input files can lead to incorrect segment processing and feature extraction. 
+**Description**:  
+The script processes formant data from vowels, removing outliers, normalizing and scaling the data, and performing visualizations for vowel space and duration distributions.
 
+**Inputs/Outputs**:  
+- **Inputs**: CSV files with extracted audio features, phonological contexts.  
+- **Outputs**: Formant plots, vowel space plots, mean duration plots, and a CSV file containing normalized and rescaled formant frequencies with additional context.
 
-## Acoustic Extraction
+**Tools/Technology Used**:  
+- **Specific Python Libraries**: `scipy`, `seaborn`, `matplotlib`
 
-**Description:**
+**Limitations**:  
+- The `find_outliers` function was replicated due to the absence of a similar Python library found in 'joeyr'.
 
-The provided script processes the audio interview file and corresponding CSV data file containing information about timestamps about each speaker. It performs the following steps:
-- Converts MP3 audio files to WAV format.
-- Reads a CSV file containing timestamps and other relevant information.
-- Extracts audio features (MFCCs, pitch, intensity, and formants) from the WAV file at specified timestamps.
-- Updates the CSV file with the extracted audio features.
-- Saves the updated CSV file.
+---
 
-**Inputs/Outputs:**
+## Conclusion
 
-- **Inputs:**  
-  MP3 interview audio files  
-  Corresponding CSV files containing information about speaker and timestamp
-- **Outputs:**  
-  Updated CSV files with extracted audio features
+This project involves several scripts that handle various aspects of speech analysis, from transcription to linguistic analysis and data visualization. The conversion from R to Python aims to enhance the workflow's efficiency and accuracy, leveraging Python's advanced libraries and tools. Each microservice is carefully documented, detailing its functions, inputs, outputs, and any limitations.
 
-**Tools/Technology Used:**
-
-- **Specific Python Libraries:** parselmouth, librosa
-
-**Limitations:**
-
-- Processing audio files or CSV files with many rows might be slow, especially with high-resolution audio data. The script took about 4 minutes to process just 10 records in the CSV file.
-
-## Data Merging
-
-**Description:**
-
-The script processes formant data from vowels, removes outliers, normalizes and scales the data, and performs various visualizations to analyze and present the vowel space and duration distributions. It combines data cleaning, statistical analysis, and visualization to offer insights into the vowel formant frequencies and their distributions. It performs the following steps:
-- Identified outliers using Mahalanobis distance and removed them from the dataset.
-- Created scatter plots of formant frequencies and ellipses showing confidence intervals for vowel clusters.
-- Applied Lobanov normalization and scaling to formant frequencies.
-- Produced plots of the vowel space with scaled formant frequencies and mean vowel durations by segment.
-- Merged normalized and scaled data with additional context, then saved the final dataset to a CSV file.
-
-**Inputs/Outputs:**
-
-- **Inputs:**  
-  CSV files with extracted audio features  
-  CSV files with phonological contexts
-- **Outputs:**  
-  Formant Plot with Outliers Removed: Visualizes vowel formants (formant_2 vs. formant_1) with outliers excluded, showing vowel clusters by segment.  
-  Ellipse Plot: Displays confidence ellipses around vowel clusters to illustrate their distribution and variability.  
-  Vowel Space Plot: Shows scaled formant frequencies (F2_sc vs. F1_sc) with density estimation, representing the vowel space.  
-  Mean Duration Plot: Illustrates the mean duration of vowels for each segment, highlighting duration differences by segment.  
-  CSV file containing normalized and rescaled formant frequencies, along with additional columns for context, speaker, and segment information.
-
-**Tools/Technology Used:**
-
-- **Specific Python Libraries:** scipy, seaborn, matplotlib
-
-**Limitations:**
-
-- The function `find_outliers` which was taken from the library 'joeyr' was replicated as we could not find a similar library in Python.
+For more information and access to the scripts, please refer to the respective sections above or explore the project repository.
