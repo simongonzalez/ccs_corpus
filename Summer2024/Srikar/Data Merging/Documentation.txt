@@ -1,0 +1,43 @@
+Data Merging: 
+
+Description: 
+
+The script processes formant data from vowels, removes outliers, normalizes and scales the data, and performs various visualizations to analyze and present the vowel space and duration distributions. It combines data cleaning, statistical analysis, and visualization to offer insights into the vowel formant frequencies and their distributions. It performs the following steps: 
+
+Identified outliers using Mahalanobis distance and removed them from the dataset. 
+
+Created scatter plots of formant frequencies and ellipses showing confidence intervals for vowel clusters. 
+
+Applied Lobanov normalization and scaling to formant frequencies. 
+
+Produced plots of the vowel space with scaled formant frequencies and mean vowel durations by segment. 
+
+Merged normalized and scaled data with additional context, then saved the final dataset to a CSV file. 
+
+Inputs/ Outputs: 
+
+Inputs:  
+
+CSV files with extracted audio features 
+
+CSV files with phonological contexts 
+
+Outputs:  
+
+Formant Plot with Outliers Removed: Visualizes vowel formants (formant_2 vs. formant_1) with outliers excluded, showing vowel clusters by segment. 
+
+Ellipse Plot: Displays confidence ellipses around vowel clusters to illustrate their distribution and variability. 
+
+Vowel Space Plot: Shows scaled formant frequencies (F2_sc vs. F1_sc) with density estimation, representing the vowel space. 
+
+Mean Duration Plot: Illustrates the mean duration of vowels for each segment, highlighting duration differences by segment. 
+
+CSV file containing normalized and rescaled formant frequencies, along with additional columns for context, speaker, and segment information. 
+
+Tools/Technology Used: 
+
+Specific Python Libraries: scipy, seaborn, matplotlib 
+
+Limitations: 
+
+The function find_outliers which was taken from the library ' joeyr’ was replicated as we could not find similar library in python
