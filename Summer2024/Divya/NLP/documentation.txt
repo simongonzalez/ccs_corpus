@@ -2,7 +2,7 @@ This microservice goes through the manual transcription files in the specified i
 nlp statistics for it.
 
 inputs:
-input_folder : folder where all the manual transcripts are present
+input_folder : folder where all the manual transcripts are present. point the path to this folder at the end of the script
 
 output:
 creates statistics for the files under output directory parallel to this python file

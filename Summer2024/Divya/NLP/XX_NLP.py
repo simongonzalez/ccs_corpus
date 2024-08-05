@@ -294,6 +294,7 @@ def get_output_directory_path():
 
 # Example usage
 if __name__ == '__main__':
-    input_folder = '/Users/pradeepchandran/ccs_corpus/Summer2024/01_Microservices/1_TranscriptionMapping/Input_Output/Input'
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    input_folder = os.path.join(current_dir, 'Input_Output', 'Input')
     output_folder = get_output_directory_path()
     process_folder(input_folder, output_folder)

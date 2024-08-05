@@ -5,6 +5,7 @@ from pydub import AudioSegment
 import librosa
 import parselmouth
 from parselmouth.praat import call
+import time as clock
 
 def convert_mp3_to_wav(mp3_filename, wav_filename):
     audio = AudioSegment.from_mp3(mp3_filename)
@@ -35,9 +36,8 @@ def process_audio_and_data(mp3_path, csv_path, output_csv_path, output_dir):
     sound = parselmouth.Sound(wav_filename)
 
     count = 0
+
     for i, row in table.iterrows():
-        if count > 10:
-            break
         time = row['time']
 
         # Ensure the time value is within the audio duration
